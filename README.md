@@ -7,7 +7,7 @@ elements_counter <list of URLs leading to xml documents separated with space>
 ```
 
 ### Build
-Depends on libcurl-dev(libcurl4-openssl-dev) package
+Depends on libcurl-dev(libcurl4-openssl-dev), libtbb-dev packages
 ```bash
 mkdir build
 cd build

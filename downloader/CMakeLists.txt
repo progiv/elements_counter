@@ -5,4 +5,5 @@ add_library(downloader downloader.cpp downloader.h)
 include(FindCURL)
 include_directories(${CURL_INCLUDE_DIR})
 
-target_link_libraries(downloader ${CURL_LIBRARIES})
+#add_link_options(-ltbb)
+target_link_libraries(downloader ${CURL_LIBRARIES} -ltbb)
