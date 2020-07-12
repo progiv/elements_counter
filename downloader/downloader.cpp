@@ -1,5 +1,8 @@
 #include "downloader.h"
 
+#include <algorithm>
+#include <execution>
+#include <mutex>
 #include <curl/curl.h>
 #include <iostream>
 
@@ -53,11 +56,22 @@ std::string downloadDocument(const std::string& url)
 
 std::vector<std::string> downloadDocuments(const std::vector<std::string>& urls)
 {
-    std::vector<std::string> result;
-    result.reserve(urls.size());
-    for (int i = 0; i<urls.size(); ++i) { // TODO make the loop parallel
-        std::cerr << "downloading documents (" << i+1 << "/" << urls.size() << ")" << std::endl;
-        result.emplace_back(downloadDocument(urls[i]));
-    }
+
+    std::vector<std::string> result(urls.size());
+    std::mutex mutex;
+    std::atomic<int> finished = 0;
+
+    std::cerr << "downloading documents (" << urls.size() << ")" << std::endl;
+
+    std::transform(std::execution::par_unseq, urls.begin(), urls.end(), result.begin(),
+            [&finished, &urls, &mutex](const std::string& url) {
+                std::string document = downloadDocument(url);
+                {
+                    std::lock_guard<std::mutex> lock(mutex);
+                    finished.fetch_add(1);
+                    std::cerr << "downloading documents (" << finished.load() << "/" << urls.size() << ")" << std::endl;
+                }
+                return document;
+            });
     return result;
 }
