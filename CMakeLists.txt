@@ -3,8 +3,9 @@ project(elements_counter)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(elements_counter elements_counter.cpp)
-
+add_subdirectory(third-party)
 add_subdirectory(downloader)
+add_subdirectory(counter)
 
-target_link_libraries(elements_counter downloader)
+add_executable(elements_counter elements_counter.cpp)
+target_link_libraries(elements_counter downloader counter)

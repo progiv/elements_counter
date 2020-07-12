@@ -31,7 +31,7 @@ std::string downloadDocument(const std::string& url)
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         /* tell libcurl to follow redirection if present */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-        curl_easy_setopt(curl, CURLOPT_MAXREDIRS, downloader::CURLOPT_MAXREDIRS_VALUE);
+        curl_easy_setopt(curl, CURLOPT_MAXREDIRS, CURLOPT_MAXREDIRS_VALUE);
 
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeBufferCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
@@ -51,11 +51,11 @@ std::string downloadDocument(const std::string& url)
 
 } // namespace
 
-std::vector<std::string> downloader::downloadDocuments(const std::vector<std::string>& urls)
+std::vector<std::string> downloadDocuments(const std::vector<std::string>& urls)
 {
     std::vector<std::string> result;
     result.reserve(urls.size());
-    for (int i = 0; i<urls.size(); ++i) {
+    for (int i = 0; i<urls.size(); ++i) { // TODO make the loop parallel
         std::cerr << "downloading documents (" << i+1 << "/" << urls.size() << ")" << std::endl;
         result.emplace_back(downloadDocument(urls[i]));
     }
