@@ -7,7 +7,7 @@
 int main(int argc, char** argv)
 {
     if (argc<=1) {
-        std::cerr << "Usage: Counter <list of URLs leading to xml documents separated with space>"
+        std::cerr << "Usage: elements_counter <list of URLs leading to xml documents separated with space>"
                   << std::endl;
         return 1;
     }
